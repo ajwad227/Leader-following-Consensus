@@ -1,0 +1,2 @@
+minilab_navigation
+-DCATKIN_DEVEL_PREFIX=/home/ali/hw_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ali/hw_ws/install -G Unix Makefiles

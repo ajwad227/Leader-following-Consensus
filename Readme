@@ -1,0 +1,7 @@
+This is the implementation of leader following consensus algorithm designed in 
+Ajwad, S. A., Menard, T., Moulay, E., Defoort, M., & Coirault, P. (2019). 
+Observer based leader-following consensus of second-order multi-agent systems with nonuniform sampled position data. Journal of the Franklin Institute, 356(16), 10031-10057.
+
+The time at which a robot measures its position is highly important in the proposed algorithms.
+Therefore, it is necessary that the clocks of all the machines on the network are synchronized. This can
+be achieved by incorporating Network Time Protocol (NTP) in the network.

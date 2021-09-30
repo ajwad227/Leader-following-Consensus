@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+<node name="test3" type="test_cmd_vel3" pkg="minilab_navigation" />
+<node name="test2" type="test_cmd_vel2" pkg="minilab_navigation" />
+<node name="test1" type="test_cmd_vel1" pkg="minilab_navigation" />
+<node name="move_pub_Leader" type="move_pub_Leader" pkg="minilab_navigation" />
+<node name="move_pub_agent1" type="move_pub_agent1" pkg="minilab_navigation" />
+<node name="move_pub_agent2" type="move_pub_agent2" pkg="minilab_navigation" />
+</launch>

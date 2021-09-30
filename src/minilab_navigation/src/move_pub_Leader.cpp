@@ -1,0 +1,79 @@
+#include <ros/ros.h>
+#include <tf/tf.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Pose2D.h>
+#include <nav_msgs/Odometry.h>
+
+#include <math.h>
+
+geometry_msgs::Pose2D current_pose_leader;
+
+void odomCallbackLeader(const nav_msgs::OdometryConstPtr& msg)
+{
+    // linear position
+    current_pose_leader.x = msg->pose.pose.position.x;
+    current_pose_leader.y = msg->pose.pose.position.y;
+
+    // quaternion to RPY conversion
+    tf::Quaternion q(
+        msg->pose.pose.orientation.x,
+        msg->pose.pose.orientation.y,
+        msg->pose.pose.orientation.z,
+        msg->pose.pose.orientation.w);
+    tf::Matrix3x3 m(q);
+    double roll, pitch, yaw;
+    m.getRPY(roll, pitch, yaw);
+
+    // angular position
+    current_pose_leader.theta = yaw;
+  
+}
+
+int main(int argc, char **argv)
+{
+    const double PI = 3.14159265358979323846;
+    double velocity;
+
+    ROS_INFO("start");
+
+    ros::init(argc, argv, "move_pub_Leader");
+    ros::NodeHandle n;
+    ros::Subscriber sub_odometry = n.subscribe("/minilab3/odom", 10, odomCallbackLeader);
+    ros::Publisher movement_pub = n.advertise<geometry_msgs::Twist>("/minilab3/cmd_vel",10); 
+    //
+    ros::Rate rate(10); 
+
+    //move forward 1
+    ROS_INFO("move forward");
+    ros::Time start1 = ros::Time::now();
+    while(ros::ok() && current_pose_leader.x < 2)
+    {
+        geometry_msgs::Twist move;
+        //velocity controls
+	//velocity=(sin((2*PI*ros::Time::now().toSec())/100));
+	//if (velocity<0)
+	//{
+	//	velocity=-1*velocity;	
+	//}
+        //move.linear.x =sin((2*PI*ros::Time::now().toSec())/100);//0.1+ velocity; //speed value m/s
+	move.linear.x =.2;        
+	move.angular.z = 0;
+        movement_pub.publish(move);
+
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    // just stop
+    while(ros::ok()) {
+        geometry_msgs::Twist move;
+        move.linear.x = 0;
+        move.angular.z = 0;
+        movement_pub.publish(move);
+
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    return 0;
+}
